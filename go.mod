@@ -5,8 +5,10 @@ go 1.17
 require (
 	github.com/Shopify/sarama v1.32.0
 	github.com/confluentinc/confluent-kafka-go v1.8.2
+	github.com/eclipse/paho.mqtt.golang v1.3.5
 	github.com/lovoo/goka v1.1.1
 	github.com/segmentio/kafka-go v0.4.29
+	github.com/streadway/amqp v1.0.0
 	github.com/stretchr/testify v1.7.0
 )
 
@@ -18,6 +20,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/mock v1.4.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-uuid v1.0.2 // indirect

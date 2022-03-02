@@ -42,9 +42,10 @@ docker run -d \
 - [EFAK](https://www.kafka-eagle.org/)
 
 ## 参考资料
-- 
+
 - [Kafka客户端--Go版本](https://jjmeg.github.io/posts/kafka-golang-client/)
 - [为什么不推荐使用Sarama Go客户端收发消息？](https://help.aliyun.com/document_detail/266782.html)
 - [关于 Kafka 应用开发知识点的整理](https://pandaychen.github.io/2022/01/01/A-KAFKA-USAGE-SUMUP-2/)
 - [kafka-go 读取kafka消息丢失数据的问题定位和解决](https://cloud.tencent.com/developer/article/1809467)
 - [sarama的消费者组分析、使用](https://www.cnblogs.com/payapa/p/15401357.html)
+- [多个Kafka消费者如何同时消费相同Topic下的相同Partition的数据？](https://zhuanlan.zhihu.com/p/392259838)
