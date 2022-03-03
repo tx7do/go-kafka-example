@@ -10,8 +10,8 @@ import (
 
 const Topic = "topic/bobo/#"
 
-func TestKafkaSender(t *testing.T) {
-	sender, err := NewKafkaSender([]string{"tcp://emqx:public@broker.emqx.io:1883"})
+func TestMqttSender(t *testing.T) {
+	sender, err := NewMqttSender([]string{"tcp://emqx:public@broker.emqx.io:1883"})
 	assert.Nil(t, err)
 
 	for i := 0; i < 50; i++ {

@@ -7,22 +7,22 @@ import (
 	"time"
 )
 
-type kafkaSender struct {
+type mqttSender struct {
 	writer mqtt.Client
 }
 
-func (s *kafkaSender) Send(_ context.Context, topic string, message event.Event) error {
+func (s *mqttSender) Send(_ context.Context, topic string, message event.Event) error {
 	token := s.writer.Publish(topic, 0, false, message.GetValue())
 	token.Wait()
 	return nil
 }
 
-func (s *kafkaSender) Close() error {
+func (s *mqttSender) Close() error {
 	s.writer.Disconnect(250)
 	return nil
 }
 
-func NewKafkaSender(address []string) (event.Sender, error) {
+func NewMqttSender(address []string) (event.Sender, error) {
 	opts := mqtt.NewClientOptions().AddBroker(address[0])
 
 	opts.SetKeepAlive(60 * time.Second)
@@ -33,5 +33,5 @@ func NewKafkaSender(address []string) (event.Sender, error) {
 		panic(token.Error())
 	}
 
-	return &kafkaSender{writer: c}, nil
+	return &mqttSender{writer: c}, nil
 }

@@ -10,14 +10,14 @@ import (
 	"time"
 )
 
-type kafkaReceiver struct {
+type mqttReceiver struct {
 	reader  mqtt.Client
 	topic   string
 	qos     byte
 	handler event.Handler
 }
 
-func (k *kafkaReceiver) Receive(_ context.Context, handler event.Handler) error {
+func (k *mqttReceiver) Receive(_ context.Context, handler event.Handler) error {
 	k.handler = handler
 	if token := k.reader.Subscribe(k.topic, k.qos, nil); token.Wait() && token.Error() != nil {
 		fmt.Println(token.Error())
@@ -26,13 +26,13 @@ func (k *kafkaReceiver) Receive(_ context.Context, handler event.Handler) error 
 	return nil
 }
 
-func (k *kafkaReceiver) Close() error {
+func (k *mqttReceiver) Close() error {
 	k.reader.Disconnect(250)
 	return nil
 }
 
-func NewKafkaReceiver(address []string, _ string, topics []string) (event.Receiver, error) {
-	r := &kafkaReceiver{reader: nil, qos: 0, topic: topics[0]}
+func NewMqttReceiver(address []string, _ string, topics []string) (event.Receiver, error) {
+	r := &mqttReceiver{reader: nil, qos: 0, topic: topics[0]}
 
 	opts := mqtt.NewClientOptions().AddBroker(address[0])
 
@@ -51,7 +51,7 @@ func NewKafkaReceiver(address []string, _ string, topics []string) (event.Receiv
 	return r, nil
 }
 
-func (k *kafkaReceiver) receive(_ mqtt.Client, msg mqtt.Message) {
+func (k *mqttReceiver) receive(_ mqtt.Client, msg mqtt.Message) {
 	fmt.Printf("TOPIC: %s\n", msg.Topic())
 	fmt.Printf("MSG: %s\n", msg.Payload())
 

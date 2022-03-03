@@ -7,12 +7,12 @@ import (
 	"log"
 )
 
-type kafkaReceiver struct {
+type amqpReceiver struct {
 	reader *amqp.Channel
 	topic  string
 }
 
-func (k *kafkaReceiver) Receive(ctx context.Context, handler event.Handler) error {
+func (k *amqpReceiver) Receive(ctx context.Context, handler event.Handler) error {
 	delivery, err := k.reader.Consume(k.topic, "", true, false, false, false, nil)
 	if err != nil {
 		return err
@@ -29,7 +29,7 @@ func (k *kafkaReceiver) Receive(ctx context.Context, handler event.Handler) erro
 	return nil
 }
 
-func (k *kafkaReceiver) Close() error {
+func (k *amqpReceiver) Close() error {
 	err := k.reader.Close()
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func (k *kafkaReceiver) Close() error {
 	return nil
 }
 
-func NewKafkaReceiver(address []string, _ string, topics []string) (event.Receiver, error) {
+func NewAmqpReceiver(address []string, _ string, topics []string) (event.Receiver, error) {
 	conn, err := amqp.Dial(address[0])
 	if err != nil {
 		return nil, err
@@ -57,5 +57,5 @@ func NewKafkaReceiver(address []string, _ string, topics []string) (event.Receiv
 		nil,
 	)
 
-	return &kafkaReceiver{reader: channel, topic: q.Name}, nil
+	return &amqpReceiver{reader: channel, topic: q.Name}, nil
 }

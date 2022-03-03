@@ -1,4 +1,4 @@
-package streadway
+package nats
 
 import (
 	"context"
@@ -10,8 +10,8 @@ import (
 
 const Topic = "test_topic"
 
-func TestAmqpSender(t *testing.T) {
-	sender, err := NewAmqpSender([]string{"amqp://user:bitnami@127.0.0.1:5672"})
+func TestNatsSender(t *testing.T) {
+	sender, err := NewNatsSender([]string{"nats://127.0.0.1:4222"})
 	assert.Nil(t, err)
 
 	for i := 0; i < 50; i++ {
@@ -23,8 +23,8 @@ func TestAmqpSender(t *testing.T) {
 }
 
 func send(sender event.Sender) error {
-	msg := event.NewMessage(Topic, []byte("hello world\n"))
-	err := sender.Send(context.Background(), Topic, msg)
+	msg := event.NewMessage("", []byte("hello world\n"))
+	err := sender.Send(context.Background(), "test_topic", msg)
 	if err != nil {
 		return err
 	}
