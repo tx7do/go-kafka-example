@@ -15,14 +15,16 @@ func TestKafkaReceiver(t *testing.T) {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
-	receiver, err := NewKafkaReceiver([]string{"localhost:9092"}, "a-group", []string{Topic})
+	receiver, err := NewKafkaReceiver([]string{"localhost:9092"}, "2-group", []string{"logger.sensor.ts"})
 	assert.Nil(t, err)
+	defer func(receiver event.Receiver) {
+		err := receiver.Close()
+		assert.Nil(t, err)
+	}(receiver)
 
 	assert.Nil(t, receive(receiver))
 
 	<-sigs
-	err = receiver.Close()
-	assert.Nil(t, err)
 }
 
 func receive(receiver event.Receiver) error {

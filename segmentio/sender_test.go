@@ -14,16 +14,16 @@ func TestKafkaSender(t *testing.T) {
 	sender, err := NewKafkaSender([]string{"localhost:9092"})
 	assert.Nil(t, err)
 
-	for i := 0; i < 50; i++ {
-		assert.Nil(t, send(sender))
+	for i := 100; i < 150; i++ {
+		assert.Nil(t, send(sender, i))
 	}
 
 	err = sender.Close()
 	assert.Nil(t, err)
 }
 
-func send(sender event.Sender) error {
-	msg := event.NewMessage(Topic, []byte("hello world\n"))
+func send(sender event.Sender, num int) error {
+	msg := event.NewMessage(Topic, []byte(fmt.Sprintf("[%d]hello world", num)))
 	err := sender.Send(context.Background(), Topic, msg)
 	if err != nil {
 		return err

@@ -2,6 +2,7 @@ package segmentio
 
 import (
 	"context"
+	"fmt"
 	"github.com/segmentio/kafka-go"
 	"github.com/tx7do/go-kafka-example/event"
 	"log"
@@ -14,10 +15,12 @@ type kafkaReceiver struct {
 func (k *kafkaReceiver) Receive(ctx context.Context, handler event.Handler) error {
 	go func() {
 		for {
+			fmt.Println("ddd")
 			m, err := k.reader.FetchMessage(context.Background())
 			if err != nil {
 				break
 			}
+			fmt.Println("Received ", m.Offset)
 			err = handler(ctx, event.NewMessage(string(m.Key), m.Value))
 			if err != nil {
 				log.Fatal("message handling exception:", err)
@@ -40,11 +43,12 @@ func (k *kafkaReceiver) Close() error {
 
 func NewKafkaReceiver(address []string, groupID string, topics []string) (event.Receiver, error) {
 	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:     address,
-		GroupID:     groupID,
-		GroupTopics: topics,
-		MinBytes:    10e3, // 10KB
-		MaxBytes:    10e6, // 10MB
+		Brokers:               address,
+		GroupID:               groupID,
+		GroupTopics:           topics,
+		MinBytes:              10e3, // 10KB
+		MaxBytes:              10e6, // 10MB
+		WatchPartitionChanges: true,
 	})
 	return &kafkaReceiver{reader: r}, nil
 }

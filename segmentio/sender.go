@@ -32,8 +32,9 @@ func (s *kafkaSender) Close() error {
 
 func NewKafkaSender(address []string) (event.Sender, error) {
 	w := &kafka.Writer{
-		Addr:     kafka.TCP(address...),
-		Balancer: &kafka.LeastBytes{},
+		Addr:      kafka.TCP(address...),
+		Balancer:  &kafka.LeastBytes{},
+		BatchSize: 1,
 	}
 	return &kafkaSender{writer: w}, nil
 }
