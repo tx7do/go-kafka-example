@@ -15,7 +15,7 @@ func TestMqttReceiver(t *testing.T) {
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 
-	receiver, err := NewMqttReceiver([]string{"tcp://emqx:public@broker.emqx.io:1883"}, "a-group", []string{"topic/bobo/#"})
+	receiver, err := NewMqttReceiver([]string{EmqxCnBroker}, "", []string{"topic/bobo/#"})
 	assert.Nil(t, err)
 
 	assert.Nil(t, receive(receiver))
